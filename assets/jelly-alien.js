@@ -222,8 +222,22 @@ class JellyAlienMascot {
   }
 
   _bindEvents() {
+    let lastRectTime = 0;
+    let cachedRect = null;
+    const getRect = () => {
+      const now = performance.now();
+      if (!cachedRect || now - lastRectTime > 300) {
+        cachedRect = this.canvas.getBoundingClientRect();
+        lastRectTime = now;
+      }
+      return cachedRect;
+    };
+
     this._onPointerMove = (e) => {
-      const rect = this.canvas.getBoundingClientRect();
+      // Ignora touch de rolagem na janela para não travar a rolagem nativa em celulares
+      if (e.pointerType === 'touch') return;
+      const rect = getRect();
+      if (!rect || rect.width === 0) return;
       this.pointer.x = (e.clientX - rect.left) * (this.canvas.width / rect.width);
       this.pointer.y = (e.clientY - rect.top) * (this.canvas.height / rect.height);
       this.pointer.active = true;
@@ -232,15 +246,18 @@ class JellyAlienMascot {
       this.pointer.active = false;
     };
     this._onPointerDown = (e) => {
-      const rect = this.canvas.getBoundingClientRect();
+      cachedRect = this.canvas.getBoundingClientRect();
+      lastRectTime = performance.now();
+      const rect = cachedRect;
+      if (!rect || rect.width === 0) return;
       const px = (e.clientX - rect.left) * (this.canvas.width / rect.width);
       const py = (e.clientY - rect.top) * (this.canvas.height / rect.height);
       this.poke(px, py, 16);
     };
 
-    window.addEventListener('pointermove', this._onPointerMove);
-    this.canvas.addEventListener('pointerleave', this._onPointerLeave);
-    this.canvas.addEventListener('pointerdown', this._onPointerDown);
+    window.addEventListener('pointermove', this._onPointerMove, { passive: true });
+    this.canvas.addEventListener('pointerleave', this._onPointerLeave, { passive: true });
+    this.canvas.addEventListener('pointerdown', this._onPointerDown, { passive: true });
   }
 
   destroy() {

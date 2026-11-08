@@ -23,14 +23,18 @@ Portal de integração e acolhimento do **Programa de Pós-Graduação em Desenv
 ## 📂 Estrutura de Arquivos
 
 ```text
-├── index.html          # Portal principal interativo
-├── .nojekyll           # Desativa processamento Jekyll no GitHub Pages
-├── README.md           # Documentação do repositório
-└── assets/             # Recursos visuais e interativos
+├── index.html                  # Portal principal interativo
+├── qrcode_ambiente_virtual.png # QR Code oficial em alta resolução (1036x1036)
+├── qrcode_ambiente_virtual.svg # QR Code oficial vetorial para impressão
+├── .nojekyll                   # Desativa processamento Jekyll no GitHub Pages
+├── README.md                   # Documentação do repositório
+└── assets/                     # Recursos visuais e interativos
     ├── dcsa_logo.png
     ├── jelly-alien.js
     ├── ppgdtsa_logo.png
     ├── ppgdtsa_tree.png
+    ├── qrcode_ambiente_virtual.png
+    ├── qrcode_ambiente_virtual.svg
     ├── rua_da_ciencia_logo.svg
     ├── siiepe_12_logo.svg
     ├── siiepe_banner.png
