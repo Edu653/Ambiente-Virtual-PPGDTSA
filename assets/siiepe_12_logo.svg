@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 220" width="100%" height="100%">
+  <defs>
+    <filter id="starShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- ESTRELA POLIGONAL / ORIGAMI 12ª SIIEPE (Centro em 110, 110, raio 84) -->
+  <g transform="translate(10, 0)" filter="url(#starShadow)">
+    <!-- Ponta 1 (Norte) -->
+    <polygon points="100,100 100,26 80,68" fill="#009fe3" />
+    <polygon points="100,100 100,26 120,68" fill="#00b5e2" />
+
+    <!-- Ponta 2 (Nordeste) -->
+    <polygon points="100,100 152,48 120,68" fill="#e60028" />
+    <polygon points="100,100 152,48 132,80" fill="#ee2737" />
+
+    <!-- Ponta 3 (Leste) -->
+    <polygon points="100,100 174,100 132,80" fill="#ffd000" />
+    <polygon points="100,100 174,100 132,120" fill="#ffc20e" />
+
+    <!-- Ponta 4 (Sudeste) -->
+    <polygon points="100,100 152,152 132,120" fill="#f37021" />
+    <polygon points="100,100 152,152 120,132" fill="#ff8300" />
+
+    <!-- Ponta 5 (Sul) -->
+    <polygon points="100,100 100,174 120,132" fill="#84bd00" />
+    <polygon points="100,100 100,174 80,132" fill="#97d700" />
+
+    <!-- Ponta 6 (Sudoeste) -->
+    <polygon points="100,100 48,152 80,132" fill="#0072ce" />
+    <polygon points="100,100 48,152 68,120" fill="#005a9c" />
+
+    <!-- Ponta 7 (Oeste) -->
+    <polygon points="100,100 26,100 68,120" fill="#782b90" />
+    <polygon points="100,100 26,100 68,80" fill="#652d86" />
+
+    <!-- Ponta 8 (Noroeste) -->
+    <polygon points="100,100 48,48 68,80" fill="#00a859" />
+    <polygon points="100,100 48,48 80,68" fill="#3aaa35" />
+  </g>
+
+  <!-- TIPOGRAFIA OFICIAL 12ª SIIEPE (Escura para visualização nítida em fundo claro) -->
+  <g transform="translate(195, 34)" font-family="'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif">
+    <!-- 12ª SIIEPE -->
+    <text x="0" y="44" font-size="44" font-weight="900" fill="#0f172a" letter-spacing="-0.5">12ª SIIEPE</text>
+
+    <!-- SEMANA INTEGRADA -->
+    <text x="0" y="74" font-size="19" font-weight="800" fill="#334155" letter-spacing="1">SEMANA INTEGRADA</text>
+
+    <!-- UFPEL 2026 -->
+    <text x="0" y="116" font-size="36" font-weight="600" fill="#0f172a" letter-spacing="2">UFPEL 2026</text>
+
+    <!-- ÁREAS INTEGRANTES (PONTAS COLORIDAS) -->
+    <g transform="translate(0, 134)" font-size="11" font-weight="800" fill="#475569">
+      <path d="M0,4 L8,0 L4,8 Z" fill="#f37021" />
+      <text x="12" y="7">INOVAÇÃO</text>
+
+      <path d="M84,4 L92,0 L88,8 Z" fill="#009fe3" />
+      <text x="96" y="7">ENSINO</text>
+
+      <path d="M152,4 L160,0 L156,8 Z" fill="#00a859" />
+      <text x="164" y="7">PESQUISA</text>
+
+      <path d="M230,4 L238,0 L234,8 Z" fill="#ee2737" />
+      <text x="242" y="7">EXTENSÃO</text>
+
+      <path d="M312,4 L320,0 L316,8 Z" fill="#782b90" />
+      <text x="324" y="7">JOVEM</text>
+    </g>
+  </g>
+</svg>

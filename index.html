@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Ambiente Virtual do PPGDTSA • Rua da Ciência 2026 • 12ª SIIEPE</title>
+  <meta name="description" content="Ambiente Virtual do PPGDTSA na Rua da Ciência 2026 (12ª SIIEPE UFPel): Jogo de Realidade Aumentada Trama Rural, Vitrine de Trabalhos e Quiz do Conhecimento." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =========================================================================
+       PALETA INSTITUCIONAL PPGDTSA COM BASE EM LARANJA & VARIÁVEIS DE DESIGN
+       ========================================================================= */
+    :root {
+      /* Tons de Laranja e Terracota do Logo PPGDTSA */
+      --ppg-orange: #f37e00;
+      --ppg-orange-deep: #d9531e;
+      --ppg-orange-dark: #b84110;
+      --ppg-orange-soft: #fff3ea;
+      --ppg-amber: #f59e0b;
+      --ppg-yellow: #ffd000;
+      
+      /* Tons de Verde Institucional do PPGDTSA */
+      --ppg-green: #008b38;
+      --ppg-green-dark: #006629;
+      --ppg-lime: #afca0b;
+      --ppg-sage: #bbc576;
+      
+      /* Fundo com tom de laranja acolhedor */
+      --bg-orange-base: #2a0e04;
+      --bg-orange-mid: #3d1606;
+      --bg-orange-warm: #5c2207;
+
+      /* Barreira Branca Translúcida com Blur */
+      --barrier-bg: rgba(255, 255, 255, 0.58);
+      --barrier-bg-hover: rgba(255, 255, 255, 0.68);
+      --barrier-border: rgba(255, 255, 255, 0.60);
+      --barrier-shadow: 0 24px 60px rgba(100, 28, 0, 0.16), 0 4px 16px rgba(0, 0, 0, 0.05);
+
+      /* Tipografia sobre a barreira branca */
+      --ink-900: #0f172a;
+      --ink-800: #1e293b;
+      --ink-700: #334155;
+      --ink-600: #475569;
+      --ink-500: #64748b;
+
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      background-color: var(--bg-orange-base);
+      color: var(--ink-800);
+      font-family: var(--font-main);
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE e Edge */
+      position: relative;
+      line-height: 1.45;
+    }
+
+    /* Oculta totalmente a barra de rolagem em todos os navegadores */
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar,
+    *::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      background: transparent !important;
+    }
+
+    /* =========================================================================
+       CANVAS & ELEMENTOS ANIMADOS DE FUNDO (TOM DE LARANJA PPGDTSA)
+       ========================================================================= */
+    #bgCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Efeitos de iluminação ambiente em tom de laranja e âmbar */
+    .ambient-glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(110px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.38;
+      animation: floatAmbient 22s ease-in-out infinite alternate;
+    }
+    .ambient-glow-1 {
+      top: -15%;
+      left: 15%;
+      width: 55vw;
+      height: 55vw;
+      background: radial-gradient(circle, #f37e00 0%, #d9531e 50%, transparent 75%);
+      animation-duration: 20s;
+    }
+    .ambient-glow-2 {
+      bottom: -20%;
+      right: 10%;
+      width: 60vw;
+      height: 60vw;
+      background: radial-gradient(circle, #ff9500 0%, #b84110 50%, transparent 75%);
+      animation-duration: 25s;
+    }
+    .ambient-glow-3 {
+      top: 35%;
+      left: 40%;
+      width: 45vw;
+      height: 45vw;
+      background: radial-gradient(circle, #ffd000 0%, #d9531e 50%, transparent 75%);
+      opacity: 0.25;
+      animation-duration: 28s;
+    }
+
+    @keyframes floatAmbient {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, -30px) scale(1.10); }
+      100% { transform: translate(-30px, 45px) scale(0.92); }
+    }
+
+    /* =========================================================================
+       CONTAINER DA PÁGINA COM A BARREIRA BRANCA TRANSLÚCIDA COM BLUR
+       ========================================================================= */
+    .page-viewport {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(14px, 3vw, 32px) clamp(10px, 2.5vw, 24px);
+    }
+
+    /* BARREIRA BRANCA TRANSPARENTE COM BLUR */
+    .frosted-glass-barrier {
+      position: relative;
+      width: 100%;
+      max-width: 1100px;
+      background: var(--barrier-bg);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      border: 1.5px solid var(--barrier-border);
+      box-shadow: var(--barrier-shadow);
+      border-radius: clamp(22px, 3.5vw, 36px);
+      padding: clamp(18px, 3.6vw, 40px) clamp(16px, 3.2vw, 38px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(18px, 3vw, 32px);
+    }
+
+    /* =========================================================================
+       CABEÇALHO: LOGOTIPOS INSTITUCIONAIS & EVENTOS
+       (OCUPANDO TODO O CABEÇALHO, SEM PÍLULA)
+       ========================================================================= */
+    .header-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logos-fullwidth {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: clamp(8px, 2.4vw, 28px);
+      padding: 2px 4px 16px;
+      border-bottom: 1.5px solid rgba(15, 23, 42, 0.08);
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      flex: 1 1 0;
+      min-width: 0;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+    }
+    .brand-link:hover {
+      transform: translateY(-2px);
+      opacity: 0.85;
+    }
+
+    .logo-img-ufpel {
+      height: clamp(38px, 5.2vw, 56px);
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    .logo-img-dcsa {
+      height: clamp(34px, 4.6vw, 50px);
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    .logo-img-ppgdtsa {
+      height: clamp(40px, 5.5vw, 62px);
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    .logo-img-siiepe {
+      height: clamp(42px, 5.8vw, 64px);
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    .logo-img-rua {
+      height: clamp(44px, 6.0vw, 68px);
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 6px rgba(0, 102, 41, 0.22));
+    }
+
+    .brand-sep {
+      width: 1px;
+      height: 38px;
+      background: rgba(15, 23, 42, 0.12);
+      flex-shrink: 0;
+    }
+
+    /* BADGE MAIS ACIMA: "INSCRIÇÕES ABERTAS PARA MESTRADO" */
+    .top-callout-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(243, 126, 0, 0.12) 0%, rgba(217, 83, 30, 0.18) 100%);
+      border: 1px solid rgba(243, 126, 0, 0.35);
+      color: #b84110;
+      font-size: clamp(0.78rem, 1.4vw, 0.90rem);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      box-shadow: 0 2px 10px rgba(243, 126, 0, 0.10);
+    }
+    .callout-pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #f37e00;
+      box-shadow: 0 0 10px #f37e00;
+      animation: pulseDot 1.8s infinite ease-in-out;
+    }
+
+    /* TÍTULO PRINCIPAL (BEM MAIOR E DESTACADO) */
+    .title-block {
+      text-align: center;
+    }
+    .main-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.10rem, 5.2vw, 3.40rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      color: #0c1a10;
+      background: linear-gradient(135deg, #092113 0%, #006629 55%, #c2410c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-top: 2px;
+    }
+    .main-subtitle {
+      font-size: clamp(0.88rem, 1.8vw, 1.10rem);
+      color: #475569;
+      font-weight: 600;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .subtitle-tag {
+      color: #008b38;
+      font-weight: 700;
+    }
+
+    /* =========================================================================
+       ZONA CENTRAL: OS 3 BOTÕES DE ACESSO ALINHADOS SOBRE O MEIO DA TELA
+       ========================================================================= */
+    .center-stage {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(10px, 2.5vw, 24px) 0;
+    }
+
+    .tools-grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(14px, 3.5vw, 44px);
+      width: 100%;
+      max-width: 960px;
+    }
+
+    /* Card/Botão Interativo */
+    .tool-link-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      cursor: pointer;
+      outline: none;
+      flex: 1 1 0;
+      min-width: 0;
+      max-width: 250px;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .tool-link-card:focus-visible {
+      border-radius: 24px;
+      box-shadow: 0 0 0 4px var(--ppg-orange);
+    }
+
+    /* =========================================================================
+       BOTÃO 1: JOGO DE REALIDADE AUMENTADA (ÍCONE LIVRE SEM CÍRCULO ATRÁS)
+       ========================================================================= */
+    .btn-icon-ar {
+      position: relative;
+      width: clamp(105px, 16vw, 150px);
+      height: clamp(105px, 16vw, 150px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
+    }
+    .btn-img-ar {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.16));
+      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+    }
+    .tool-link-card:hover .btn-img-ar {
+      transform: translateY(-8px) scale(1.08);
+      filter: drop-shadow(0 18px 28px rgba(243, 126, 0, 0.32));
+    }
+
+    /* =========================================================================
+       BOTÃO 2 (MEIO): VITRINE DE TRABALHOS (FORMATO REDONDO CRISTALINO COM MÁXIMA TRANSPARÊNCIA)
+       ========================================================================= */
+    .btn-circle-wrap.is-vitrine-center {
+      width: clamp(118px, 17.5vw, 172px);
+      height: clamp(118px, 17.5vw, 172px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.04) 65%, transparent 100%);
+      border: 2.5px solid rgba(243, 126, 0, 0.60);
+      box-shadow: 0 16px 38px rgba(243, 126, 0, 0.18), inset 0 2px 6px rgba(255, 255, 255, 0.50);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.32s ease, border-color 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    /* Halo e pulso exclusivo da Vitrine no centro */
+    .vitrine-halo {
+      position: absolute;
+      inset: -9px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: #ffd000;
+      border-right-color: #f37e00;
+      border-bottom-color: #008b38;
+      animation: rotateRing 14s linear infinite;
+      opacity: 0.85;
+    }
+    .vitrine-pulse {
+      position: absolute;
+      inset: -14px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(243, 126, 0, 0.35);
+      animation: rippleCenter 2.8s infinite ease-out;
+      pointer-events: none;
+    }
+
+    .tool-link-card:hover .is-vitrine-center {
+      transform: translateY(-10px) scale(1.07);
+      border-color: #008b38;
+      box-shadow: 0 22px 50px rgba(0, 139, 56, 0.30), 0 0 35px rgba(243, 126, 0, 0.30);
+    }
+
+    .btn-img-vitrine {
+      width: 90%;
+      height: 90%;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 18px rgba(0, 139, 56, 0.22));
+      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .tool-link-card:hover .btn-img-vitrine {
+      transform: scale(1.08) rotate(2deg);
+    }
+
+    /* =========================================================================
+       BOTÃO 3: QUIZ DO PPGDTSA (MASCOTE HTML LIVRE SEM CÍRCULO ATRÁS)
+       ========================================================================= */
+    .btn-icon-quiz {
+      position: relative;
+      width: clamp(130px, 19vw, 185px);
+      height: clamp(125px, 18.5vw, 175px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
+    }
+
+    #mascotBtnCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: none;
+      transform: scale(1.15);
+      filter: drop-shadow(0 10px 18px rgba(0, 102, 41, 0.22));
+      transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+    }
+    .tool-link-card:hover #mascotBtnCanvas {
+      transform: translateY(-8px) scale(1.22);
+      filter: drop-shadow(0 18px 28px rgba(0, 139, 56, 0.35));
+    }
+
+    /* =========================================================================
+       ROTULAGEM DOS BOTÕES
+       ========================================================================= */
+    .tool-meta {
+      text-align: center;
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      width: 100%;
+      max-width: 100%;
+    }
+    .tool-title {
+      font-family: var(--font-display);
+      font-size: clamp(0.92rem, 1.8vw, 1.20rem);
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.01em;
+      transition: color 0.2s ease;
+      width: 100%;
+      word-wrap: break-word;
+    }
+    .tool-link-card:hover .tool-title {
+      color: #b84110;
+    }
+    .tool-tag {
+      font-size: clamp(0.70rem, 1.2vw, 0.82rem);
+      color: #475569;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 999px;
+      background: rgba(0, 102, 41, 0.08);
+      border: 1px solid rgba(0, 102, 41, 0.16);
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      max-width: 100%;
+      text-align: center;
+    }
+    .tool-link-card:hover .tool-tag {
+      background: rgba(243, 126, 0, 0.15);
+      border-color: rgba(243, 126, 0, 0.40);
+      color: #b84110;
+    }
+
+    .is-vitrine-card .tool-title {
+      font-size: clamp(1.05rem, 2.1vw, 1.35rem);
+      color: #0f172a;
+    }
+    .is-vitrine-card .tool-tag {
+      background: rgba(243, 126, 0, 0.12);
+      border-color: rgba(243, 126, 0, 0.32);
+      color: #c2410c;
+    }
+
+    /* =========================================================================
+       SEÇÃO INFERIOR:
+       1. LOGO ACIMA: LINKS PARA INSTAGRAM & SITE OFICIAL
+       2. EM BAIXO: CAIXA QUE FALA SOBRE O EDITAL DE SELEÇÃO 2027
+       ========================================================================= */
+    .bottom-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* 1. LINKS DO INSTAGRAM E SITE OFICIAL (LOGO ACIMA DO EDITAL - SEMPRE LADO A LADO) */
+    .social-links-row {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(10px, 2vw, 16px);
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .pill-link-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 9px clamp(14px, 2.4vw, 24px);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1.5px solid rgba(15, 23, 42, 0.12);
+      color: #1e293b;
+      text-decoration: none;
+      font-size: clamp(0.80rem, 1.4vw, 0.90rem);
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+      transition: all 0.22s ease;
+    }
+    .pill-link-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
+    }
+
+    .btn-instagram:hover {
+      border-color: rgba(225, 48, 108, 0.65);
+      color: #c13584;
+      background: #fff5f8;
+    }
+    .btn-website:hover {
+      border-color: rgba(0, 139, 56, 0.65);
+      color: #006629;
+      background: #f0fdf4;
+    }
+
+    /* 2. CAIXA DO EDITAL DE SELEÇÃO DE ALUNO REGULAR 2027 (EM BAIXO) */
+    .edital-box-container {
+      width: 100%;
+      max-width: 780px;
+    }
+    .edital-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 22px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 245, 235, 0.95) 100%);
+      border: 1.5px solid rgba(243, 126, 0, 0.35);
+      box-shadow: 0 8px 24px rgba(217, 83, 30, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .edital-box:hover {
+      transform: translateY(-3px);
+      border-color: var(--ppg-orange);
+      box-shadow: 0 12px 32px rgba(243, 126, 0, 0.22), 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+    .edital-box-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(243, 126, 0, 0.15) 0%, rgba(217, 83, 30, 0.25) 100%);
+      border: 1px solid rgba(243, 126, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #b84110;
+      flex-shrink: 0;
+    }
+    .edital-box-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .edital-box-tag {
+      font-size: 0.74rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #b84110;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .edital-box-title {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .edital-box-desc {
+      font-size: 0.80rem;
+      color: #475569;
+      font-weight: 500;
+    }
+    .edital-box-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--ppg-orange) 0%, var(--ppg-orange-deep) 100%);
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 800;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(217, 83, 30, 0.30);
+      flex-shrink: 0;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .edital-box:hover .edital-box-cta {
+      background: linear-gradient(135deg, #ff8c00 0%, var(--ppg-orange) 100%);
+      transform: scale(1.03);
+    }
+
+    /* Rodapé com créditos */
+    .footer-credits {
+      text-align: center;
+      font-size: 0.72rem;
+      color: #64748b;
+      line-height: 1.4;
+      margin-top: 4px;
+    }
+
+    /* =========================================================================
+       ANIMAÇÕES KEYFRAMES
+       ========================================================================= */
+    @keyframes rotateRing {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.4); opacity: 1; }
+    }
+
+    @keyframes rippleCenter {
+      0% {
+        transform: scale(0.94);
+        opacity: 0.7;
+      }
+      50% {
+        opacity: 0.3;
+      }
+      100% {
+        transform: scale(1.24);
+        opacity: 0;
+      }
+    }
+
+    /* =========================================================================
+       RESPONSIVIDADE E AJUSTES DE TELA (TABLET & MOBILE)
+       ========================================================================= */
+    @media (max-width: 768px) {
+      .page-viewport {
+        padding: 10px 8px;
+      }
+      .frosted-glass-barrier {
+        padding: 20px 14px;
+        gap: 18px;
+        border-radius: 24px;
+      }
+      .brand-logos-fullwidth {
+        gap: 8px;
+        padding-bottom: 12px;
+      }
+      .logo-img-ufpel { height: 28px; }
+      .logo-img-dcsa { height: 24px; }
+      .logo-img-ppgdtsa { height: 30px; }
+      .logo-img-siiepe { height: 30px; }
+      .logo-img-rua { height: 32px; }
+      .brand-sep { height: 20px; }
+
+      .main-title {
+        font-size: 1.85rem;
+      }
+      .main-subtitle {
+        font-size: 0.84rem;
+      }
+
+      .tools-grid {
+        gap: 8px;
+      }
+      .btn-icon-ar {
+        width: clamp(84px, 22vw, 115px);
+        height: clamp(84px, 22vw, 115px);
+      }
+      .btn-circle-wrap.is-vitrine-center {
+        width: clamp(98px, 28vw, 138px);
+        height: clamp(98px, 28vw, 138px);
+      }
+      .btn-icon-quiz {
+        width: clamp(102px, 26vw, 142px);
+        height: clamp(98px, 25vw, 136px);
+      }
+      .tool-title {
+        font-size: 0.78rem;
+      }
+      .tool-tag {
+        font-size: 0.62rem;
+        padding: 2px 6px;
+      }
+      .is-vitrine-card .tool-title {
+        font-size: 0.88rem;
+      }
+
+      .edital-box {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        gap: 10px;
+        padding: 12px 14px;
+      }
+      .edital-box-icon {
+        display: none;
+      }
+      .edital-box-tag {
+        justify-content: center;
+      }
+      .edital-box-cta {
+        justify-content: center;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =======================================================================
+       CANVAS DE FUNDO DINÂMICO (TOM DE LARANJA & ÁRVORE-REDE PPGDTSA)
+       ======================================================================= -->
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- Brilhos Ambientais Quentes em Tons de Laranja e Âmbar -->
+  <div class="ambient-glow ambient-glow-1"></div>
+  <div class="ambient-glow ambient-glow-2"></div>
+  <div class="ambient-glow ambient-glow-3"></div>
+
+  <!-- =======================================================================
+       VIEWPORT COM A BARREIRA BRANCA TRANSLÚCIDA COM BLUR
+       ======================================================================= -->
+  <div class="page-viewport">
+
+    <main class="frosted-glass-barrier" role="main">
+
+      <!-- =====================================================================
+           CABEÇALHO: LOGOS INSTITUCIONAIS & DA RUA DA CIÊNCIA / 12ª SIIEPE
+           (OCUPANDO TODO O CABEÇALHO, SEM PÍLULA)
+           ===================================================================== -->
+      <header class="header-section">
+        <div class="brand-logos-fullwidth">
+          <!-- UFPel -->
+          <a href="https://wp.ufpel.edu.br/" target="_blank" rel="noopener noreferrer" class="brand-link" title="Universidade Federal de Pelotas">
+            <img src="assets/ufpel_logo.png" alt="UFPel" class="logo-img-ufpel" />
+          </a>
+
+          <div class="brand-sep"></div>
+
+          <!-- DCSA -->
+          <a href="https://wp.ufpel.edu.br/dcsa/" target="_blank" rel="noopener noreferrer" class="brand-link" title="Departamento de Ciências Sociais Agrárias">
+            <img src="assets/dcsa_logo.png" alt="DCSA" class="logo-img-dcsa" />
+          </a>
+
+          <div class="brand-sep"></div>
+
+          <!-- PPGDTSA -->
+          <a href="https://wp.ufpel.edu.br/ppgdtsa/" target="_blank" rel="noopener noreferrer" class="brand-link" title="Programa de Pós-Graduação em Desenvolvimento Territorial e Sistemas Agroindustriais">
+            <img src="assets/ppgdtsa_logo.png" alt="PPGDTSA" class="logo-img-ppgdtsa" />
+          </a>
+
+          <div class="brand-sep"></div>
+
+          <!-- 12ª SIIEPE UFPEL 2026 -->
+          <a href="https://wp.ufpel.edu.br/siiepe/" target="_blank" rel="noopener noreferrer" class="brand-link" title="12ª SIIEPE • Semana Integrada UFPel 2026">
+            <img src="assets/siiepe_12_logo.svg" alt="12ª SIIEPE 2026" class="logo-img-siiepe" />
+          </a>
+
+          <div class="brand-sep"></div>
+
+          <!-- RUA DA CIÊNCIA 2026 -->
+          <div class="brand-link" title="Rua da Ciência 2026 • 12ª SIIEPE">
+            <img src="assets/rua_da_ciencia_logo.svg" alt="Rua da Ciência 2026" class="logo-img-rua" />
+          </div>
+        </div>
+
+        <!-- TEXTO MAIS ACIMA: CONFORME SOLICITADO ("Inscrições abertas para mestrado") -->
+        <div class="top-callout-badge">
+          <span class="callout-pulse-dot"></span>
+          <span>Inscrições abertas para mestrado</span>
+        </div>
+
+        <!-- TÍTULO PRINCIPAL (MAIOR E DESTACADO) -->
+        <div class="title-block">
+          <h1 class="main-title">Ambiente Virtual do PPGDTSA</h1>
+          <p class="main-subtitle">
+            <span class="subtitle-tag">Rua da Ciência 2026</span> • 12ª SIIEPE • UFPel Câmpus Anglo
+          </p>
+        </div>
+      </header>
+
+      <!-- =====================================================================
+           ZONA CENTRAL: OS 3 BOTÕES DE ACESSO ALINHADOS SOBRE O MEIO DA TELA
+           ===================================================================== -->
+      <section class="center-stage" aria-label="Ferramentas Interativas">
+        <div class="tools-grid">
+
+          <!-- BOTÃO 1 (ESQUERDA): JOGO COM REALIDADE AUMENTADA (TRAMA RURAL - SEM CÍRCULO ATRÁS) -->
+          <a href="https://dudu653.github.io/ppgdtsa-ar/" target="_blank" rel="noopener noreferrer" class="tool-link-card" id="btnToolAR" title="Iniciar Jogo com Realidade Aumentada (Trama Rural)">
+            <div class="btn-icon-ar">
+              <img src="assets/trama_rural_logo.png" alt="Símbolo Trama Rural" class="btn-img-ar" />
+            </div>
+            <div class="tool-meta">
+              <h2 class="tool-title">Realidade Aumentada</h2>
+              <span class="tool-tag">Trama Rural</span>
+            </div>
+          </a>
+
+          <!-- BOTÃO 2 (MEIO): VITRINE DE TRABALHOS (NOVO SÍMBOLO & FORMATO REDONDO EXCLUSIVO NO CENTRO) -->
+          <a href="https://edu653.github.io/Vitrine-PPGDTSA/" target="_blank" rel="noopener noreferrer" class="tool-link-card is-vitrine-card" id="btnToolVitrine" title="Abrir Vitrine Tecnológica de Trabalhos do PPGDTSA">
+            <div class="btn-circle-wrap is-vitrine-center">
+              <div class="vitrine-halo"></div>
+              <div class="vitrine-pulse"></div>
+              <img src="assets/vitrine_symbol.svg" alt="Símbolo Vitrine Tecnológica PPGDTSA" class="btn-img-vitrine" />
+            </div>
+            <div class="tool-meta">
+              <h2 class="tool-title">Vitrine de Trabalhos</h2>
+              <span class="tool-tag">Dissertações</span>
+            </div>
+          </a>
+
+          <!-- BOTÃO 3 (DIREITA): QUIZ DO PPGDTSA (COM MASCOTE HTML - SEM CÍRCULO ATRÁS) -->
+          <a href="https://edu653.github.io/QUIZ-PPGDTSA/" target="_blank" rel="noopener noreferrer" class="tool-link-card" id="btnToolQuiz" title="Jogar Quiz da Ciência do PPGDTSA">
+            <div class="btn-icon-quiz">
+              <canvas id="mascotBtnCanvas" width="240" height="240" title="Chimia, o mascote do PPGDTSA!"></canvas>
+            </div>
+            <div class="tool-meta">
+              <h2 class="tool-title">Quiz da Ciência</h2>
+              <span class="tool-tag">Desafio Interativo</span>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           SEÇÃO INFERIOR:
+           1. LOGO ACIMA: INSTAGRAM & SITE INSTITUCIONAL
+           2. EM BAIXO: CAIXA DO EDITAL DE SELEÇÃO 2027
+           ===================================================================== -->
+      <footer class="bottom-section">
+
+        <!-- 1. LINKS DO INSTAGRAM E SITE OFICIAL (LOGO ACIMA DO EDITAL) -->
+        <div class="social-links-row">
+          <!-- Instagram -->
+          <a href="https://www.instagram.com/ppgdtsa.ufpel/" target="_blank" rel="noopener noreferrer" class="pill-link-btn btn-instagram" title="Siga o PPGDTSA no Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #e1306c;">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span>Instagram</span>
+          </a>
+
+          <!-- Site Oficial -->
+          <a href="https://wp.ufpel.edu.br/ppgdtsa/" target="_blank" rel="noopener noreferrer" class="pill-link-btn btn-website" title="Site Oficial do PPGDTSA / UFPel">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #008b38;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span>Página Institucional</span>
+          </a>
+        </div>
+
+        <!-- 2. CAIXA QUE FALA SOBRE O EDITAL (EM BAIXO) -->
+        <div class="edital-box-container">
+          <a href="https://wp.ufpel.edu.br/ppgdtsa/files/2026/10/Edital-2026-2027.pdf" target="_blank" rel="noopener noreferrer" class="edital-box" title="Abrir Edital de Seleção de Aluno Regular 2027 (PDF)">
+            <div class="edital-box-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+            <div class="edital-box-content">
+              <span class="edital-box-tag">
+                <span class="callout-pulse-dot" style="background:#f37e00; box-shadow:0 0 8px #f37e00;"></span>
+                Processo Seletivo 2027
+              </span>
+              <span class="edital-box-title">Edital de Seleção de Aluno Regular 2027</span>
+              <span class="edital-box-desc">Ingresso para Aluno Regular de Mestrado • Confira os prazos, vagas e requisitos</span>
+            </div>
+            <div class="edital-box-cta">
+              <span>Baixar Edital (PDF)</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </div>
+          </a>
+        </div>
+
+        <p class="footer-credits">
+          PPGDTSA • Programa de Pós-Graduação em Desenvolvimento Territorial e Sistemas Agroindustriais<br />
+          Departamento de Ciências Sociais Agrárias (DCSA) • Universidade Federal de Pelotas (UFPel)
+        </p>
+      </footer>
+
+    </main>
+
+  </div>
+
+  <!-- =======================================================================
+       SCRIPTS: FUNDO DINÂMICO LARANJA & MASCOTE HTML NO BOTÃO DO QUIZ
+       ======================================================================= -->
+  <script type="module">
+    import { JellyAlienMascot } from './assets/jelly-alien.js';
+
+    /* =======================================================================
+       1. CANVAS DE FUNDO: REDE ORGÂNICA EM TONS DE LARANJA & ÂMBAR PPGDTSA
+       ======================================================================= */
+    (() => {
+      const canvas = document.getElementById('bgCanvas');
+      const ctx = canvas.getContext('2d');
+
+      const ORANGE_PALETTE = [
+        '#f37e00', // Laranja Cítrico PPGDTSA
+        '#d9531e', // Terracota PPGDTSA
+        '#ffd000', // Amarelo Solar
+        '#ff9500', // Âmbar Vibrante
+        '#008b38', // Verde Floresta (toque de contraste)
+        '#afca0b'  // Verde Lima
+      ];
+
+      let width = 0;
+      let height = 0;
+      let nodes = [];
+      let spores = [];
+      let mouseX = -9999;
+      let mouseY = -9999;
+
+      function resize() {
+        const dpr = window.devicePixelRatio || 1;
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        ctx.scale(dpr, dpr);
+      }
+
+      function initNetwork() {
+        resize();
+        const nodeCount = Math.min(38, Math.max(18, Math.floor((width * height) / 30000)));
+        nodes = Array.from({ length: nodeCount }, (_, i) => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.50,
+          vy: (Math.random() - 0.5) * 0.50,
+          radius: 6 + (i % 5) * 3.5,
+          color: ORANGE_PALETTE[i % ORANGE_PALETTE.length],
+          phase: Math.random() * Math.PI * 2
+        }));
+
+        spores = Array.from({ length: 26 }, () => ({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.30,
+          vy: -0.25 - Math.random() * 0.40,
+          radius: 1.5 + Math.random() * 2.2,
+          alpha: 0.25 + Math.random() * 0.50,
+          color: ORANGE_PALETTE[Math.floor(Math.random() * ORANGE_PALETTE.length)]
+        }));
+      }
+
+      window.addEventListener('resize', resize);
+
+      window.addEventListener('pointermove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      window.addEventListener('pointerleave', () => {
+        mouseX = -9999;
+        mouseY = -9999;
+      });
+
+      function render(timestamp) {
+        ctx.clearRect(0, 0, width, height);
+        const t = timestamp * 0.001;
+
+        // Atualiza nós
+        for (const n of nodes) {
+          n.x += n.vx;
+          n.y += n.vy;
+
+          const dxMouse = n.x - mouseX;
+          const dyMouse = n.y - mouseY;
+          const distMouse = Math.hypot(dxMouse, dyMouse);
+          if (distMouse < 130 && distMouse > 0) {
+            const force = (1 - distMouse / 130) * 0.9;
+            n.x += (dxMouse / distMouse) * force;
+            n.y += (dyMouse / distMouse) * force;
+          }
+
+          if (n.x < -40) n.x = width + 40;
+          if (n.x > width + 40) n.x = -40;
+          if (n.y < -40) n.y = height + 40;
+          if (n.y > height + 40) n.y = -40;
+        }
+
+        // Filamentos conectivos em tom dourado/laranja
+        const maxDist = Math.min(190, Math.max(120, width * 0.17));
+        ctx.lineCap = 'round';
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[j].x - nodes[i].x;
+            const dy = nodes[j].y - nodes[i].y;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist < maxDist) {
+              const alpha = (1 - dist / maxDist) * 0.32;
+              ctx.strokeStyle = `rgba(243, 126, 0, ${alpha.toFixed(3)})`;
+              ctx.lineWidth = 1.8;
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Esporos ascendentes
+        for (const s of spores) {
+          s.x += s.vx;
+          s.y += s.vy;
+          if (s.y < -20) {
+            s.y = height + 20;
+            s.x = Math.random() * width;
+          }
+          if (s.x < 0) s.x = width;
+          if (s.x > width) s.x = 0;
+
+          ctx.fillStyle = s.color;
+          ctx.globalAlpha = s.alpha * (0.8 + 0.2 * Math.sin(t * 2 + s.x));
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+
+        // Esferas luminosas
+        for (const n of nodes) {
+          const pulse = 1 + 0.14 * Math.sin(t * 1.5 + n.phase);
+          const r = n.radius * pulse;
+
+          const grad = ctx.createRadialGradient(n.x, n.y, r * 0.2, n.x, n.y, r * 2.3);
+          grad.addColorStop(0, n.color);
+          grad.addColorStop(1, 'transparent');
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, r * 2.3, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = n.color;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(n.x - r * 0.28, n.y - r * 0.28, r * 0.26, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        requestAnimationFrame(render);
+      }
+
+      initNetwork();
+      requestAnimationFrame(render);
+    })();
+
+    /* =======================================================================
+       2. MASCOTE HTML5 NO BOTÃO DO QUIZ (CHIMIA)
+       ======================================================================= */
+    (() => {
+      const mascotCanvas = document.getElementById('mascotBtnCanvas');
+      if (!mascotCanvas) return;
+
+      const mascot = new JellyAlienMascot(mascotCanvas, {
+        state: 'idle',
+        followCursor: true,
+        squishFactor: 1.05
+      });
+
+      mascot.setTheme({
+        core: 'rgba(232, 250, 175, 0.90)',
+        mid: 'rgba(0, 139, 56, 0.72)',
+        edge: 'rgba(0, 88, 34, 0.88)',
+        rim: '#afca0b',
+        glow: 'rgba(175, 202, 11, 0.38)',
+        irisOuter: '#005722',
+        irisInner: '#ffd000',
+        tint: 'rgba(0, 139, 56, 0.22)'
+      });
+
+      const MASCOT_STATES = ['idle', 'happy', 'curious', 'reading'];
+      let stateIndex = 0;
+      setInterval(() => {
+        stateIndex = (stateIndex + 1) % MASCOT_STATES.length;
+        mascot.setState(MASCOT_STATES[stateIndex]);
+      }, 7000);
+
+      const quizCard = document.getElementById('btnToolQuiz');
+      if (quizCard) {
+        quizCard.addEventListener('mouseenter', () => {
+          mascot.setState('happy');
+          mascot.poke();
+        });
+        quizCard.addEventListener('pointerdown', () => {
+          mascot.poke();
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
